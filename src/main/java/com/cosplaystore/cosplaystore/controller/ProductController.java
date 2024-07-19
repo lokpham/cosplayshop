@@ -12,17 +12,23 @@ import com.cosplaystore.cosplaystore.mapper.ProductMapper;
 import com.cosplaystore.cosplaystore.model.Product;
 import com.cosplaystore.cosplaystore.service.ProductService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
+@Validated
 @RequestMapping(value = "/product")
 
 public class ProductController {
@@ -39,12 +45,12 @@ public class ProductController {
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
                                                 .message("Get All Product Secucess!")
-                                                .data(productMapper.toProductResponse(products.get(0)))
+                                                .data(productMapper.toListProductResponse(products))
                                                 .build());
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<ResponseObject> getProduct(@PathVariable int id) {
+        public ResponseEntity<ResponseObject> getProduct(@Min(value = 0) @PathVariable int id) {
                 Product product = productService.getProduct(id);
 
                 return ResponseEntity.ok()
@@ -54,8 +60,28 @@ public class ProductController {
                                                 .build());
         }
 
+        @PutMapping("/disable/{id}")
+        public ResponseEntity<ResponseObject> putMethodName(@PathVariable int id) {
+                productService.disableProduct(id);
+                return ResponseEntity.ok()
+                                .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
+                                                .message("Disable Secucess!")
+                                                .data(null)
+                                                .build());
+        }
+
+        @PutMapping("/undisable/{id}")
+        public ResponseEntity<ResponseObject> undisable(@PathVariable int id) {
+                productService.unDisableProduct(id);
+                return ResponseEntity.ok()
+                                .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
+                                                .message("Undisable Secucess!")
+                                                .data(null)
+                                                .build());
+        }
+
         @PostMapping("/add")
-        public ResponseEntity<ResponseObject> postMethodName(@RequestBody ProductRequest productRequest) {
+        public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody ProductRequest productRequest) {
                 // TODO: process POST request
                 Product product = productService.addProduct(productRequest);
                 if (product != null) {
@@ -67,6 +93,18 @@ public class ProductController {
                 } else {
                         throw new GeneralException(Message.PRODUCT_ADD_FAILED);
                 }
+
+        }
+
+        @PutMapping("update/{id}")
+        public ResponseEntity<ResponseObject> update(@PathVariable int id,
+                        @Valid @RequestBody ProductRequest productRequest) {
+                Product product = productService.updateProduct(id, productRequest);
+                return ResponseEntity.ok()
+                                .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
+                                                .message("Add a product successful!")
+                                                .data(productMapper.toProductResponse(product))
+                                                .build());
 
         }
 

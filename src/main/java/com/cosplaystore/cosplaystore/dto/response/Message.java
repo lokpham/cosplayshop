@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Message {
-    PRODUCT_NOT_FOUND("Not found found", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND("Not found product", HttpStatus.BAD_REQUEST),
     CATETORY_NOT_FOUND("Not found catetory", HttpStatus.BAD_REQUEST),
     FIELD_ERROR("FIeld error", HttpStatus.BAD_REQUEST),
     CATETORY_LIST_FAILED("Failed to get catetory list", HttpStatus.BAD_REQUEST),

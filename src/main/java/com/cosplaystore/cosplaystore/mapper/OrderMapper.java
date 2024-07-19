@@ -10,5 +10,6 @@ import com.cosplaystore.cosplaystore.model.Order;
 public interface OrderMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "orderDetails", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Order toOrder(OrderRequest OrderRequest);
 }

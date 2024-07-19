@@ -12,6 +12,8 @@ public interface ProductService {
 
     void disableProduct(int id);
 
+    void unDisableProduct(int id);
+
     Product getProduct(int id);
 
     Product addProduct(ProductRequest productRequest);

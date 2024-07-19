@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(p.getName());
         product.setPrice(p.getPrice());
         product.setStock(p.getStock());
-        product.setDisable(p.getDisable());
+        product.setLike_number(p.getLike_number());
         Catetory catetory = catetoryService.getCatetory(p.getCatetory_id());
         product.setCatetory(catetory);
         return productRepo.save(product);
@@ -78,6 +78,13 @@ public class ProductServiceImpl implements ProductService {
         product.setCatetory(catetory);
         return productRepo.save(product);
 
+    }
+
+    @Override
+    public void unDisableProduct(int id) {
+        Product product = getProduct(id);
+        product.setDisable(false);
+        productRepo.save(product);
     }
 
 }

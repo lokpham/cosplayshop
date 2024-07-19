@@ -18,7 +18,7 @@ public class GlobalException {
                                 .body(ResponseObject.builder()
                                                 .message(e.getMessage())
                                                 .status_code(HttpStatus.BAD_REQUEST.value())
-                                                .data(e.getClass())
+                                                .data(null).cause(e.getClass())
                                                 .build());
         };
 
@@ -28,7 +28,7 @@ public class GlobalException {
                 return ResponseEntity.badRequest()
                                 .body(ResponseObject.builder()
                                                 .message(e.getMessage()).status_code(e.getStatus().value())
-                                                .data(e.getClass())
+                                                .data(null).cause(e.getClass())
                                                 .build());
         };
 
@@ -39,17 +39,18 @@ public class GlobalException {
                                                 .status_code(HttpStatus.BAD_REQUEST.value())
                                                 .message(e.getFieldError().getField() + ":"
                                                                 + e.getFieldError().getDefaultMessage())
-                                                .data(null)
+                                                .data(null).cause(e.getClass())
                                                 .build());
         };
 
         @ExceptionHandler(DataIntegrityViolationException.class)
         public ResponseEntity<ResponseObject> handleDataViolation(DataIntegrityViolationException e) {
+
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder()
                                                 .status_code(HttpStatus.BAD_REQUEST.value())
-                                                .message(e.getCause().getMessage())
-                                                .data(null)
+                                                .message(e.getMostSpecificCause().getMessage())
+                                                .data(null).cause(e.getClass())
                                                 .build());
         };
 

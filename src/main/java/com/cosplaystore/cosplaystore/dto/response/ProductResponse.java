@@ -19,6 +19,7 @@ public class ProductResponse {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
+    private int like_number;
     private Catetory catetory;
     private Boolean disable;
 

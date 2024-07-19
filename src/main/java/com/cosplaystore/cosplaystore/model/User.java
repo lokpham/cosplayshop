@@ -13,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +39,7 @@ public class User {
     @Column(name = "email")
     private String email;
     @Column(name = "birth_day")
+    @Temporal(TemporalType.DATE)
     private Date birth_day;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

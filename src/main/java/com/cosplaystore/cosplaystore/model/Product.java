@@ -42,6 +42,9 @@ public class Product {
     private int stock;
     @Column(name = "description")
     private String description;
+    @Column(name = "like_number")
+    private int like_number;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
