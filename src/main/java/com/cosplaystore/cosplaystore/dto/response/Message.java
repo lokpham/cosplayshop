@@ -15,6 +15,8 @@ public enum Message {
     CATETORY_LIST_FAILED("Failed to get catetory list", HttpStatus.BAD_REQUEST),
     CATETORY_EXISTED("Catetory already existed", HttpStatus.BAD_REQUEST),
     PRODUCT_ADD_FAILED("Failed to add product", HttpStatus.BAD_REQUEST),
+    WRONG_PASSWORD("Wrong password!", HttpStatus.BAD_REQUEST),
+    USERNAME_NOTFOUND("Not found username!", HttpStatus.BAD_REQUEST),
     DATA_VIOLATION("Data vialation", HttpStatus.BAD_REQUEST);
 
     private HttpStatus status;

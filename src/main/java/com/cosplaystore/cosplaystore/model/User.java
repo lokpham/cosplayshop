@@ -1,7 +1,11 @@
 package com.cosplaystore.cosplaystore.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,11 +21,13 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -31,7 +37,7 @@ public class User {
     private int id;
     @Column(name = "username")
     private String username;
-    @Column(name = "passwordd_hash")
+    @Column(name = "password_hash")
     private String password_hash;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
@@ -44,4 +50,16 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+
+    private LocalDateTime updated_at;
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+
+    private LocalDateTime created_at;
 }

@@ -45,6 +45,19 @@ public class GlobalException {
 
         @ExceptionHandler(DataIntegrityViolationException.class)
         public ResponseEntity<ResponseObject> handleDataViolation(DataIntegrityViolationException e) {
+                if (e.getMostSpecificCause().getMessage().contains("Duplicate")) {
+                        String field = e.getMostSpecificCause().getMessage().split("key")[1];
+                        int position = field.indexOf("'");
+                        field = field.substring(position + 1, field.length() - 1);
+                        field = field.substring(0, 1).toUpperCase() + field.substring(1).toLowerCase();
+
+                        return ResponseEntity.ok()
+                                        .body(ResponseObject.builder()
+                                                        .status_code(HttpStatus.BAD_REQUEST.value())
+                                                        .message(field + " already existed!")
+                                                        .data(null).cause(e.getClass())
+                                                        .build());
+                }
 
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder()

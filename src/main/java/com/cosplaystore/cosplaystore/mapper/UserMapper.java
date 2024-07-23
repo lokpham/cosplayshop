@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.cosplaystore.cosplaystore.dto.request.UserRegisterRequest;
+import com.cosplaystore.cosplaystore.dto.response.UserResponse;
 import com.cosplaystore.cosplaystore.model.User;
 
 @Mapper(componentModel = "spring")
@@ -14,5 +15,7 @@ public interface UserMapper {
     @Mapping(target = "orders", ignore = true)
     @Mapping(target = "role", ignore = true)
     User toUser(UserRegisterRequest userRegisterRequest);
+
+    UserResponse toUserResponse(User user);
 
 }
