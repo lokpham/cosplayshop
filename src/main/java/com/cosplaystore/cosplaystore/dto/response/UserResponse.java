@@ -15,6 +15,7 @@ import lombok.Setter;
 @Getter
 public class UserResponse {
 
+    private int id;
     private String username;
 
     private String email;
@@ -22,6 +23,7 @@ public class UserResponse {
     private Date birth_day;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Boolean disable;
     private LocalDateTime updated_at;
     private LocalDateTime created_at;
 }

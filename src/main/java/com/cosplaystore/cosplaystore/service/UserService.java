@@ -13,4 +13,8 @@ public interface UserService {
     User register(UserRegisterRequest userRegisterRequest);
 
     User login(LoginRequest loginRequest);
+
+    void disable(int id);
+
+    void undisable(int id);
 }

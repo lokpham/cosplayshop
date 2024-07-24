@@ -1,6 +1,7 @@
 package com.cosplaystore.cosplaystore.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosplaystore.cosplaystore.dto.request.LoginRequest;
@@ -11,12 +12,15 @@ import com.cosplaystore.cosplaystore.model.User;
 import com.cosplaystore.cosplaystore.service.UserService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -44,4 +48,21 @@ public class UserController {
                 .build());
     }
 
+    @PutMapping("disable")
+    public ResponseEntity<ResponseObject> disable(@RequestParam @Min(1) int id) {
+
+        userService.disable(id);
+        return ResponseEntity.ok().body(ResponseObject.builder()
+                .data(null).message("Disable success!").status_code(HttpStatus.OK.value())
+                .build());
+    }
+
+    @PutMapping("undisable")
+    public ResponseEntity<ResponseObject> undisable(@RequestParam @Min(1) int id) {
+        userService.undisable(id);
+
+        return ResponseEntity.ok().body(ResponseObject.builder()
+                .data(null).message("Undisable success!").status_code(HttpStatus.OK.value())
+                .build());
+    }
 }

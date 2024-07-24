@@ -1,5 +1,8 @@
 package com.cosplaystore.cosplaystore.serviceImpl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +28,17 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     @Autowired
     AuthService authService;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public User getUser(int id) {
-        throw new UnsupportedOperationException("Unimplemented method 'getUserByUsername'");
+        Optional<User> user = userRepo.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+
+            throw new GeneralException(Message.USERNAME_NOTFOUND);
+        }
 
     }
 
@@ -38,8 +48,10 @@ public class UserServiceImpl implements UserService {
         String password_hash = authService.encodePassword(password);
 
         User user = userMapper.toUser(userRegisterRequest);
+        user.setBirth_day(LocalDate.parse(userRegisterRequest.getBirth_day(), DATE_FORMATTER));
         user.setPassword_hash(password_hash);
         user.setRole(Role.USER);
+        user.setDisable(false);
 
         return userRepo.save(user);
     }
@@ -62,6 +74,25 @@ public class UserServiceImpl implements UserService {
         } else {
 
             throw new GeneralException(Message.USERNAME_NOTFOUND);
+        }
+    }
+
+    @Override
+    public void disable(int id) {
+        User user = getUser(id);
+        if (user != null) {
+            user.setDisable(true);
+            userRepo.save(user);
+        }
+    }
+
+    @Override
+    public void undisable(int id) {
+
+        User user = getUser(id);
+        if (user != null) {
+            user.setDisable(false);
+            userRepo.save(user);
         }
     }
 

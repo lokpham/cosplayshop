@@ -1,5 +1,6 @@
 package com.cosplaystore.cosplaystore.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class User {
     private String email;
     @Column(name = "birth_day")
     @Temporal(TemporalType.DATE)
-    private Date birth_day;
+    private LocalDate birth_day;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
@@ -62,4 +63,6 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
 
     private LocalDateTime created_at;
+
+    private Boolean disable;
 }

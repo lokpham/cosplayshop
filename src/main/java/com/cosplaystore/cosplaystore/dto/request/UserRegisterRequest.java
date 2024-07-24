@@ -2,7 +2,7 @@ package com.cosplaystore.cosplaystore.dto.request;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.cosplaystore.cosplaystore.annotation.ValidDate;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -19,7 +19,7 @@ public class UserRegisterRequest {
     @Email
     private String email;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private Date birth_day;
+    @ValidDate
+    private String birth_day;
 
 }
