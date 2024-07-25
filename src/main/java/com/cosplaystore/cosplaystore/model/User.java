@@ -2,7 +2,6 @@ package com.cosplaystore.cosplaystore.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,8 +35,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "username")
-    private String username;
+    @Column(name = "name")
+    private String name;
     @Column(name = "password_hash")
     private String password_hash;
     @Column(name = "role")

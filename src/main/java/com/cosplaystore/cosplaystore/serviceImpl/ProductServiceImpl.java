@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
@@ -30,6 +33,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProduct(int start, int size) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            System.out.println(authentication.getAuthorities());
+        }
         Pageable page = PageRequest.of((start - 1) * size, size);
         Page<Product> products = productRepo.findAll(page);
         if (products.hasContent()) {

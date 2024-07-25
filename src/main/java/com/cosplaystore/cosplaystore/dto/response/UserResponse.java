@@ -16,7 +16,7 @@ import lombok.Setter;
 public class UserResponse {
 
     private int id;
-    private String username;
+    private String name;
 
     private String email;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")

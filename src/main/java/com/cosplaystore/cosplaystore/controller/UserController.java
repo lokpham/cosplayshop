@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosplaystore.cosplaystore.dto.request.LoginRequest;
 import com.cosplaystore.cosplaystore.dto.request.UserRegisterRequest;
+import com.cosplaystore.cosplaystore.dto.response.AuthReponse;
 import com.cosplaystore.cosplaystore.dto.response.ResponseObject;
 import com.cosplaystore.cosplaystore.mapper.UserMapper;
 import com.cosplaystore.cosplaystore.model.User;
+import com.cosplaystore.cosplaystore.service.AuthService;
 import com.cosplaystore.cosplaystore.service.UserService;
 
 import jakarta.validation.Valid;
@@ -20,11 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
+    @Autowired
+    AuthService authService;
     @Autowired
     UserService userService;
     @Autowired
@@ -32,7 +35,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        User user = userService.register(userRegisterRequest);
+        User user = authService.register(userRegisterRequest);
 
         return ResponseEntity.ok().body(ResponseObject.builder()
                 .data(userMapper.toUserResponse(user)).message("Register success!").status_code(HttpStatus.OK.value())
@@ -41,10 +44,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody LoginRequest loginRequest) {
-        User user = userService.login(loginRequest);
+        AuthReponse authReponse = authService.login(loginRequest);
 
         return ResponseEntity.ok().body(ResponseObject.builder()
-                .data(userMapper.toUserResponse(user)).message("Login success!").status_code(HttpStatus.OK.value())
+                .data(authReponse).message("Login success!").status_code(HttpStatus.OK.value())
                 .build());
     }
 

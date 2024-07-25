@@ -2,7 +2,6 @@ package com.cosplaystore.cosplaystore.validator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 import com.cosplaystore.cosplaystore.annotation.ValidDate;
 
