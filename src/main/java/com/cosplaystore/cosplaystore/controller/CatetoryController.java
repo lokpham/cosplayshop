@@ -47,25 +47,23 @@ public class CatetoryController {
 
         @GetMapping("/{id}")
         public ResponseEntity<ResponseObject> getMethodName(@PathVariable int id) {
-                Catetory catetory = catetoryService.getCatetory(id);
-                CatetoryResponse catetoryResponse = catetoryMapper.toCatoryResponse(catetory);
+                CatetoryResponse catetory = catetoryService.getCatetory(id);
 
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder()
                                                 .status_code(HttpStatus.OK.value())
                                                 .message("Get a catetory success!")
-                                                .data(catetoryResponse).build());
+                                                .data(catetory).build());
 
         }
 
         @PutMapping("/update")
         public ResponseEntity<ResponseObject> putMethodName(@RequestParam int id,
                         @RequestBody @Valid CatetoryRequest catetoryRequest) {
-                Catetory catetory = catetoryService.updateCatetory(id, catetoryRequest);
-                CatetoryResponse catetoryResponse = catetoryMapper.toCatoryResponse(catetory);
+                catetoryService.updateCatetory(id, catetoryRequest);
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder()
-                                                .data(catetoryResponse)
+                                                .data(null)
                                                 .message("Update success!")
                                                 .status_code(HttpStatus.OK.value()).build());
 
@@ -83,12 +81,12 @@ public class CatetoryController {
 
         @GetMapping("/all")
         public ResponseEntity<ResponseObject> getMethodName() {
-                List<Catetory> catetories = catetoryService.getAllCatetory();
+                List<CatetoryResponse> catetories = catetoryService.getAllCatetory();
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder()
                                                 .status_code(HttpStatus.OK.value())
                                                 .message("Get all catetory")
-                                                .data(catetoryMapper.toListCatetoryResponses(catetories))
+                                                .data(catetories)
                                                 .build());
         }
 

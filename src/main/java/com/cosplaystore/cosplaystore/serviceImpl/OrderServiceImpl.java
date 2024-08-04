@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
                             .quantity(orderDetailRequest.getQuantity())
                             .unit_price(orderDetailRequest.getUnit_price())
                             .order(order)
-                            .product(productService.getProduct(orderDetailRequest.getProduct_id()))
+                            .product(productService.getProductById(orderDetailRequest.getProduct_id()))
                             .build());
         }
         return orderRepo.save(order);

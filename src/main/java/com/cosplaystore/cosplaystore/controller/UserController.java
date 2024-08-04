@@ -8,8 +8,7 @@ import com.cosplaystore.cosplaystore.dto.request.LoginRequest;
 import com.cosplaystore.cosplaystore.dto.request.UserRegisterRequest;
 import com.cosplaystore.cosplaystore.dto.response.AuthReponse;
 import com.cosplaystore.cosplaystore.dto.response.ResponseObject;
-import com.cosplaystore.cosplaystore.mapper.UserMapper;
-import com.cosplaystore.cosplaystore.model.User;
+import com.cosplaystore.cosplaystore.dto.response.UserResponse;
 import com.cosplaystore.cosplaystore.service.AuthService;
 import com.cosplaystore.cosplaystore.service.UserService;
 
@@ -30,15 +29,13 @@ public class UserController {
     AuthService authService;
     @Autowired
     UserService userService;
-    @Autowired
-    UserMapper userMapper;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        User user = authService.register(userRegisterRequest);
+        UserResponse userResponse = authService.register(userRegisterRequest);
 
         return ResponseEntity.ok().body(ResponseObject.builder()
-                .data(userMapper.toUserResponse(user)).message("Register success!").status_code(HttpStatus.OK.value())
+                .data(userResponse).message("Register success!").status_code(HttpStatus.OK.value())
                 .build());
     }
 

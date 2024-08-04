@@ -39,10 +39,10 @@ public class CatetoryServiceImpl implements CatetoryService {
     }
 
     @Override
-    public Catetory updateCatetory(int id, CatetoryRequest catetoryRequest) {
-        Catetory catetory = getCatetory(id);
+    public void updateCatetory(int id, CatetoryRequest catetoryRequest) {
+        Catetory catetory = getCatetoryById(id);
         catetory.setName(catetoryRequest.getName());
-        return catetoryRepo.save(catetory);
+        catetoryRepo.save(catetory);
 
     }
 
@@ -65,17 +65,23 @@ public class CatetoryServiceImpl implements CatetoryService {
     }
 
     @Override
-    public List<Catetory> getAllCatetory() {
+    public List<CatetoryResponse> getAllCatetory() {
         List<Catetory> catetories = catetoryRepo.findAll();
         if (catetories.isEmpty()) {
             throw new GeneralException(Message.CATETORY_LIST_FAILED);
         } else {
-            return catetories;
+            return catetoryMapper.toListCatetoryResponses(catetories);
         }
     }
 
     @Override
-    public Catetory getCatetory(int id) {
+    public CatetoryResponse getCatetory(int id) {
+        Catetory catetory = getCatetoryById(id);
+        return catetoryMapper.toCatoryResponse(catetory);
+    }
+
+    @Override
+    public Catetory getCatetoryById(int id) {
         Optional<Catetory> cOptional = catetoryRepo.findById(id);
         if (cOptional.isPresent()) {
             return cOptional.get();

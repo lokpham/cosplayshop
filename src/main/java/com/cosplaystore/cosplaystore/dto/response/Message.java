@@ -18,6 +18,8 @@ public enum Message {
     WRONG_PASSWORD("Wrong password!", HttpStatus.BAD_REQUEST),
     AUTHENTICATION_FAILED("Authentication failed", HttpStatus.UNAUTHORIZED),
     USERNAME_NOTFOUND("Not found username!", HttpStatus.BAD_REQUEST),
+    ACCESS_DENY("You don't have right to access this!", HttpStatus.FORBIDDEN),
+    INVALID_TOKEN("Your token is invalid!", HttpStatus.UNAUTHORIZED),
     DATA_VIOLATION("Data vialation", HttpStatus.BAD_REQUEST);
 
     private HttpStatus status;

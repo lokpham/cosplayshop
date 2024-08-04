@@ -14,14 +14,16 @@ public interface CatetoryService {
 
     public CatetoryResponse addCatetory(CatetoryRequest catetoryRequest);
 
-    public Catetory updateCatetory(int id, CatetoryRequest catetoryRequest);
+    public void updateCatetory(int id, CatetoryRequest catetoryRequest);
 
     public Optional<Catetory> catetoryExistedById(int id);
 
     public void deleteCatetory(int id);
 
-    public List<Catetory> getAllCatetory();
+    public List<CatetoryResponse> getAllCatetory();
 
-    public Catetory getCatetory(int id);
+    public CatetoryResponse getCatetory(int id);
+
+    public Catetory getCatetoryById(int id);
 
 }

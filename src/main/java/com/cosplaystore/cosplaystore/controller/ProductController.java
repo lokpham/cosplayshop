@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
 import com.cosplaystore.cosplaystore.dto.response.Message;
+import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
 import com.cosplaystore.cosplaystore.dto.response.ResponseObject;
 import com.cosplaystore.cosplaystore.exception.GeneralException;
-import com.cosplaystore.cosplaystore.mapper.ProductMapper;
-import com.cosplaystore.cosplaystore.model.Product;
 import com.cosplaystore.cosplaystore.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -20,10 +19,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,29 +33,27 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class ProductController {
         @Autowired
         ProductService productService;
-        @Autowired
-        ProductMapper productMapper;
         private int pageSize = 10;
 
         @GetMapping("/all")
         public ResponseEntity<ResponseObject> getMethodName(@RequestParam int page) {
-                List<Product> products = productService.getAllProduct(page, pageSize);
+                List<ProductResponse> products = productService.getAllProduct(page, pageSize);
 
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
                                                 .message("Get All Product Secucess!")
-                                                .data(productMapper.toListProductResponse(products))
+                                                .data(products)
                                                 .build());
         }
 
         @GetMapping("/{id}")
         public ResponseEntity<ResponseObject> getProduct(@Min(value = 0) @PathVariable int id) {
-                Product product = productService.getProduct(id);
+                ProductResponse product = productService.getProduct(id);
 
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
                                                 .message("Get All Product Secucess!")
-                                                .data(productMapper.toProductResponse(product))
+                                                .data(product)
                                                 .build());
         }
 
@@ -86,13 +79,12 @@ public class ProductController {
 
         @PostMapping("/add")
         public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody ProductRequest productRequest) {
-                // TODO: process POST request
-                Product product = productService.addProduct(productRequest);
+                ProductResponse product = productService.addProduct(productRequest);
                 if (product != null) {
                         return ResponseEntity.ok()
                                         .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
                                                         .message("Add a product successful!")
-                                                        .data(productMapper.toProductResponse(product))
+                                                        .data(product)
                                                         .build());
                 } else {
                         throw new GeneralException(Message.PRODUCT_ADD_FAILED);
@@ -103,11 +95,11 @@ public class ProductController {
         @PutMapping("update/{id}")
         public ResponseEntity<ResponseObject> update(@PathVariable int id,
                         @Valid @RequestBody ProductRequest productRequest) {
-                Product product = productService.updateProduct(id, productRequest);
+                ProductResponse product = productService.updateProduct(id, productRequest);
                 return ResponseEntity.ok()
                                 .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
                                                 .message("Add a product successful!")
-                                                .data(productMapper.toProductResponse(product))
+                                                .data(product)
                                                 .build());
 
         }
