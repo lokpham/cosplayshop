@@ -6,6 +6,7 @@ import com.cosplaystore.cosplaystore.dto.response.AuthReponse;
 import com.cosplaystore.cosplaystore.dto.response.UserResponse;
 
 public interface AuthService {
+    public String encodePassword(String password);
 
     public UserResponse register(UserRegisterRequest userRegisterRequest);
 

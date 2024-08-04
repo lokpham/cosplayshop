@@ -77,13 +77,13 @@ public class JwtService {
         return token;
     }
 
-    public String getJWTAccessToken(User user) throws JOSEException {
+    public String getJWTAccessToken(User user) {
         String token = generateToken(user, new Date(Instant.now().plus(30, ChronoUnit.SECONDS).toEpochMilli()));
 
         return token;
     }
 
-    public String getJWTRefreshToken(User user) throws JOSEException {
+    public String getJWTRefreshToken(User user) {
         String token = generateToken(user, new Date(Instant.now().plus(30, ChronoUnit.DAYS).toEpochMilli()));
 
         return token;
