@@ -24,7 +24,8 @@ public class SecurityConfig {
     private final String key = "tD3ExPN/BFIefbJ9uZfWzlBFUdTZoJ2qKozVjGg7YDLjDidCxfJSSpCEsqU+dDsX";
 
     private String[] PUBLIC = {
-            "/user/login", "/user/register"
+            "/user/login", "/user/register",
+            "/**"
     };
 
     @Bean

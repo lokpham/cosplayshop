@@ -25,7 +25,12 @@ public class CatetoryServiceImpl implements CatetoryService {
     @Override
     public CatetoryResponse addCatetory(CatetoryRequest catetoryRequest) {
         Catetory catetory = catetoryMapper.toCatetory(catetoryRequest);
-
+        if (catetoryRequest.getId_parent() == -1) {
+            catetory.setParent(null);
+        } else {
+            Catetory parent = getCatetoryById(catetoryRequest.getId_parent());
+            catetory.setParent(parent);
+        }
         return catetoryMapper.toCatoryResponse(catetoryRepo.save(catetory));
     }
 
@@ -42,6 +47,10 @@ public class CatetoryServiceImpl implements CatetoryService {
     public void updateCatetory(int id, CatetoryRequest catetoryRequest) {
         Catetory catetory = getCatetoryById(id);
         catetory.setName(catetoryRequest.getName());
+        if (catetoryRequest.getId_parent() != -1) {
+            Catetory parent = getCatetoryById(catetoryRequest.getId_parent());
+            catetory.setParent(parent);
+        }
         catetoryRepo.save(catetory);
 
     }
@@ -66,7 +75,7 @@ public class CatetoryServiceImpl implements CatetoryService {
 
     @Override
     public List<CatetoryResponse> getAllCatetory() {
-        List<Catetory> catetories = catetoryRepo.findAll();
+        List<Catetory> catetories = catetoryRepo.findNull();
         if (catetories.isEmpty()) {
             throw new GeneralException(Message.CATETORY_LIST_FAILED);
         } else {

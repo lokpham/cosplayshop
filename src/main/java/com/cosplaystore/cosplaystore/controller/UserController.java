@@ -30,15 +30,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        UserResponse userResponse = authService.register(userRegisterRequest);
-
-        return ResponseEntity.ok().body(ResponseObject.builder()
-                .data(userResponse).message("Register success!").status_code(HttpStatus.OK.value())
-                .build());
-    }
-
     @PostMapping("/login")
     public ResponseEntity<ResponseObject> postMethodName(@Valid @RequestBody LoginRequest loginRequest) {
         AuthReponse authReponse = authService.login(loginRequest);

@@ -10,5 +10,5 @@ public class CatetoryRequest {
     @NotBlank
     @NotNull
     private String name;
-
+    private int id_parent;
 }

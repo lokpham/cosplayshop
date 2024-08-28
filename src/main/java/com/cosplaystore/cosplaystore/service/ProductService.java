@@ -9,7 +9,7 @@ import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
 import com.cosplaystore.cosplaystore.model.Product;
 
 public interface ProductService {
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    // @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     List<ProductResponse> getAllProduct(int start, int size);
 
     ProductResponse updateProduct(int id, ProductRequest p);

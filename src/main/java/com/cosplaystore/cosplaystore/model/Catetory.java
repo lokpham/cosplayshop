@@ -14,6 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -37,6 +39,16 @@ public class Catetory {
     @Column(name = "name")
 
     private String name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+
+    @JsonIgnore
+    @JoinColumn(name = "id_parent")
+    private Catetory parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    private List<Catetory> children;
+
     @Column(name = "updated_at")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)

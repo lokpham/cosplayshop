@@ -60,42 +60,31 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse register(UserRegisterRequest userRegisterRequest) {
-        String password = userRegisterRequest.getPassword();
-        String password_hash = encodePassword(password);
-
-        User user = userMapper.toUser(userRegisterRequest);
-        user.setBirth_day(LocalDate.parse(userRegisterRequest.getBirth_day(), DATE_FORMATTER));
-        user.setPassword_hash(password_hash);
-        user.setRole(Role.USER);
-        user.setDisable(false);
-
-        return userMapper.toUserResponse(userRepo.save(user));
+    public User register(LoginRequest loginRequest) {
+        User newuser = userMapper.toUser(loginRequest);
+        newuser.setDisable(false);
+        newuser.setRole(Role.USER);
+        return userRepo.save(newuser);
     }
 
     @Override
     public AuthReponse login(LoginRequest loginRequest) {
 
         Optional<User> user_opt = userRepo.findByEmail(loginRequest.getEmail());
-
-        if (user_opt.isPresent()) {
-
-            User user = user_opt.get();
-
-            if (user.getPassword_hash().equals(encodePassword(loginRequest.getPassword()))) {
-                String token = jwtService.getJWTAccessToken(user);
-                AuthReponse authReponse = new AuthReponse();
-                authReponse.setAccessToken(token);
-                authReponse.setEmail(user.getEmail());
-                return authReponse;
-            } else {
-                throw new GeneralException(Message.WRONG_PASSWORD);
-            }
-
+        User user;
+        if (!user_opt.isPresent()) {
+            user = register(loginRequest);
         } else {
-            throw new GeneralException(Message.USERNAME_NOTFOUND);
+            user = user_opt.get();
         }
-
+        String token = jwtService.getJWTAccessToken(user);
+        AuthReponse authReponse = new AuthReponse();
+        authReponse.setAccessToken(token);
+        authReponse.setEmail(user.getEmail());
+        authReponse.setName(user.getName());
+        authReponse.setPicture(user.getPicture());
+        authReponse.setRole(user.getRole());
+        return authReponse;
     }
 
 }

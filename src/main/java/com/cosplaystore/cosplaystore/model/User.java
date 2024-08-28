@@ -37,16 +37,14 @@ public class User {
     private int id;
     @Column(name = "name")
     private String name;
-    @Column(name = "password_hash")
-    private String password_hash;
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
     @Column(name = "email")
     private String email;
-    @Column(name = "birth_day")
-    @Temporal(TemporalType.DATE)
-    private LocalDate birth_day;
+
+    @Column(name = "picture")
+    private String picture;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
