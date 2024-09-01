@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
+import com.cosplaystore.cosplaystore.dto.response.ProductFullInforResponse;
 import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
 import com.cosplaystore.cosplaystore.model.Product;
 
@@ -23,4 +24,6 @@ public interface ProductService {
     ProductResponse addProduct(ProductRequest productRequest);
 
     Product getProductById(int id);
+
+    ProductFullInforResponse getFullInfor(int id);
 }

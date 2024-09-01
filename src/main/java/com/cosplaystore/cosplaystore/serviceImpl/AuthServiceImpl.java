@@ -76,6 +76,9 @@ public class AuthServiceImpl implements AuthService {
             user = register(loginRequest);
         } else {
             user = user_opt.get();
+            if (user.getDisable()) {
+                throw new GeneralException(Message.USER_BANNED);
+            }
         }
         String token = jwtService.getJWTAccessToken(user);
         AuthReponse authReponse = new AuthReponse();

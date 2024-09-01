@@ -1,6 +1,5 @@
 package com.cosplaystore.cosplaystore.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,19 +30,22 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product")
-public class Product {
+@Table(name = "product_item")
+public class ProductItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "description")
-    private String description;
-
+    @Column(name = "sku")
+    private String sku;
     @Column(name = "image")
     private String image;
+
+    @Column(name = "price")
+    private int price;
+    @Column(name = "stock")
+    private int stock;
+    @Column(name = "discount")
+    private int discount;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -54,17 +56,11 @@ public class Product {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "catetory_id")
-    private Catetory catetory;
-    @Column(name = "disable")
-    private Boolean disable;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<OrderDetail> orderDetails;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     @JsonIgnore
-    private List<ProductItem> productItems;
+    private Product product;
 
+    @OneToMany(mappedBy = "productItem")
+    private List<ProductItemVariant> productItemVariants;
 }

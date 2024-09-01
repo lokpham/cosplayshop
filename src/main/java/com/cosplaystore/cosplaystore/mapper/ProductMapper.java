@@ -6,12 +6,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
+import com.cosplaystore.cosplaystore.dto.response.ProductItemResponse;
 import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
 import com.cosplaystore.cosplaystore.model.Product;
+import com.cosplaystore.cosplaystore.model.ProductItem;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
     ProductResponse toProductResponse(Product product);
+
+    ProductItemResponse toProductItemResponse(ProductItem productItem);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "created_at", ignore = true)
@@ -22,4 +26,5 @@ public interface ProductMapper {
 
     List<ProductResponse> toListProductResponse(List<Product> list);
 
+    List<ProductItemResponse> toProductListItemResponses(List<ProductItem> list);
 }

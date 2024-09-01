@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
 import com.cosplaystore.cosplaystore.dto.response.Message;
+import com.cosplaystore.cosplaystore.dto.response.ProductFullInforResponse;
 import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
 import com.cosplaystore.cosplaystore.dto.response.ResponseObject;
 import com.cosplaystore.cosplaystore.exception.GeneralException;
+import com.cosplaystore.cosplaystore.model.ProductItem;
+import com.cosplaystore.cosplaystore.service.ProductItemService;
 import com.cosplaystore.cosplaystore.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -100,6 +103,17 @@ public class ProductController {
                                 .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
                                                 .message("Add a product successful!")
                                                 .data(product)
+                                                .build());
+
+        }
+
+        @GetMapping("details/{id}")
+        public ResponseEntity<ResponseObject> getDetail(@PathVariable int id) {
+                ProductFullInforResponse productFullInforResponse = productService.getFullInfor(id);
+                return ResponseEntity.ok()
+                                .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
+                                                .message("Add a product successful!")
+                                                .data(productFullInforResponse)
                                                 .build());
 
         }
