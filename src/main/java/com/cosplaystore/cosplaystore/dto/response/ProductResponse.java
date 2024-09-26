@@ -23,5 +23,6 @@ public class ProductResponse {
     private int price;
     private int discount;
     private Boolean disable;
-
+    private String tags;
+    private RateDTO rate;
 }

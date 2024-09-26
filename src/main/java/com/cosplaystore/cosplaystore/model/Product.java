@@ -59,7 +59,12 @@ public class Product {
     private Catetory catetory;
     @Column(name = "disable")
     private Boolean disable;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ProductRate> rates;
 
+    @Column(name = "tags")
+    private String tags;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderDetail> orderDetails;
 

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
+import com.cosplaystore.cosplaystore.dto.request.RateRequest;
 import com.cosplaystore.cosplaystore.dto.response.Message;
 import com.cosplaystore.cosplaystore.dto.response.ProductFullInforResponse;
 import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
@@ -95,7 +96,18 @@ public class ProductController {
 
         }
 
-        @PutMapping("update/{id}")
+        @PostMapping("/rate")
+        public ResponseEntity<ResponseObject> rateProduct(@RequestBody RateRequest rateRequest) {
+                // TODO: process PUT request
+                productService.rateProduct(rateRequest);
+                return ResponseEntity.ok()
+                                .body(ResponseObject.builder().status_code(HttpStatus.OK.value())
+                                                .message("rating successful!")
+                                                .data(null)
+                                                .build());
+        }
+
+        @PostMapping("/update/{id}")
         public ResponseEntity<ResponseObject> update(@PathVariable int id,
                         @Valid @RequestBody ProductRequest productRequest) {
                 ProductResponse product = productService.updateProduct(id, productRequest);

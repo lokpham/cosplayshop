@@ -1,5 +1,6 @@
 package com.cosplaystore.cosplaystore.serviceImpl;
 
+import java.lang.classfile.ClassFile.Option;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,10 +17,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.cosplaystore.cosplaystore.dto.request.ProductRequest;
+import com.cosplaystore.cosplaystore.dto.request.RateRequest;
 import com.cosplaystore.cosplaystore.dto.response.Message;
 import com.cosplaystore.cosplaystore.dto.response.ProductFullInforResponse;
 import com.cosplaystore.cosplaystore.dto.response.ProductItemResponse;
 import com.cosplaystore.cosplaystore.dto.response.ProductResponse;
+import com.cosplaystore.cosplaystore.dto.response.RateDTO;
 import com.cosplaystore.cosplaystore.dto.response.VariantDTO;
 import com.cosplaystore.cosplaystore.exception.GeneralException;
 import com.cosplaystore.cosplaystore.mapper.ProductMapper;
@@ -27,8 +30,12 @@ import com.cosplaystore.cosplaystore.model.Catetory;
 import com.cosplaystore.cosplaystore.model.Product;
 import com.cosplaystore.cosplaystore.model.ProductItem;
 import com.cosplaystore.cosplaystore.model.ProductItemVariant;
+import com.cosplaystore.cosplaystore.model.ProductRate;
+import com.cosplaystore.cosplaystore.model.User;
 import com.cosplaystore.cosplaystore.model.Variant;
+import com.cosplaystore.cosplaystore.repository.ProductRateRepo;
 import com.cosplaystore.cosplaystore.repository.ProductRepo;
+import com.cosplaystore.cosplaystore.repository.UserRepo;
 import com.cosplaystore.cosplaystore.service.CatetoryService;
 import com.cosplaystore.cosplaystore.service.ProductItemService;
 import com.cosplaystore.cosplaystore.service.ProductService;
@@ -39,6 +46,11 @@ import lombok.experimental.var;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepo productRepo;
+
+    @Autowired
+    UserRepo userRepo;
+    @Autowired
+    ProductRateRepo productRateRepo;
     @Autowired
     CatetoryService catetoryService;
     @Autowired
@@ -71,6 +83,14 @@ public class ProductServiceImpl implements ProductService {
                 ProductResponse productResponse = productMapper.toProductResponse(product);
                 productResponse.setPrice(minProductItem.getPrice());
                 productResponse.setDiscount(minProductItem.getDiscount());
+                RateDTO rateDTO = new RateDTO();
+                Integer avg_rate = productRepo.getAverageRateRoundedDown(product.getId());
+                if (avg_rate == null) {
+                    avg_rate = 0;
+                }
+                rateDTO.setAvg_rate(avg_rate);
+                rateDTO.setTotal(productRepo.getRateCount(product.getId()));
+                productResponse.setRate(rateDTO);
                 productResponses.add(productResponse);
             }
             return productResponses;
@@ -107,10 +127,23 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @SuppressWarnings("unused")
     public ProductFullInforResponse getFullInfor(int id) {
         ProductFullInforResponse productFullInforResponse = new ProductFullInforResponse();
         Product product = getProductById(id);
-        productFullInforResponse.setProductResponse(productMapper.toProductResponse(product));
+        ProductResponse productResponse = productMapper.toProductResponse(product);
+        RateDTO rateDTO = new RateDTO();
+        Integer avg_rate = productRepo.getAverageRateRoundedDown(id);
+        if (avg_rate == null) {
+            rateDTO.setAvg_rate(0);
+        } else {
+            rateDTO.setAvg_rate(avg_rate);
+
+        }
+
+        rateDTO.setTotal(productRepo.getRateCount(id));
+        productResponse.setRate(rateDTO);
+        productFullInforResponse.setProductResponse(productResponse);
         List<ProductItemResponse> productItems = productItemService.getProductItemsViaProductId(id);
 
         List<Object[]> objects = productRepo.getProductVariant(id);
@@ -156,6 +189,32 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse getProduct(int id) {
         Product product = getProductById(id);
         return productMapper.toProductResponse(product);
+    }
+
+    @Override
+    public void rateProduct(RateRequest rateRequest) {
+        Optional<ProductRate> proOptional = productRateRepo.findByUserIdAndProductId(rateRequest.getUser_id(),
+                rateRequest.getProduct_id());
+        if (proOptional.isPresent()) {
+            ProductRate productRate = proOptional.get();
+            productRate.setValue(rateRequest.getValue());
+            productRateRepo.save(productRate);
+        } else {
+            ProductRate productRate = new ProductRate();
+            productRate.setValue(rateRequest.getValue());
+
+            Product product = getProductById(rateRequest.getProduct_id());
+            productRate.setProduct(product);
+
+            Optional<User> userOptional = userRepo.findById(rateRequest.getUser_id());
+            if (userOptional.isPresent()) {
+                productRate.setUser(userOptional.get());
+            } else {
+                throw new GeneralException(Message.USERNAME_NOTFOUND);
+            }
+            productRateRepo.save(productRate);
+
+        }
     }
 
 }
